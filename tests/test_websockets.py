@@ -11,6 +11,39 @@ from sanic.exceptions import ServerError
 from sanic.server.websockets.frame import WebsocketFrameAssembler
 
 
+def test_websockets_frame_assembler():
+    # create a WebsocketFrameAssembler instance
+    assembler = WebsocketFrameAssembler()
+
+    # create a Frame object
+    frame = Frame(True, False, False, 0, 0, b"")
+
+    # add the frame to the assembler
+    assembler.add_frame(frame)
+
+    # get the assembled frame
+    assembled_frame = assembler.get_frame()
+
+    # assert that the assembled frame is not None
+    assert assembled_frame is not None
+
+    # assert that the assembled frame has the same attributes as the original frame
+    assert assembled_frame.fin == frame.fin
+    assert assembled_frame.rsv1 == frame.rsv1
+    assert assembled_frame.rsv2 == frame.rsv2
+    assert assembled_frame.rsv3 == frame.rsv3
+    assert assembled_frame.opcode == frame.opcode
+    assert assembled_frame.payload == frame.payload
+
+    # assert that the assembled frame has the same attributes as the original frame
+    assert assembled_frame.fin == frame.fin
+    assert assembled_frame.rsv1 == frame.rsv1
+    assert assembled_frame.rsv2 == frame.rsv2
+    assert assembled_frame.rsv3 == frame.rsv3
+    assert assembled_frame.opcode == frame.opcode
+    assert assembled_frame.payload == frame.payload
+
+
 try:
     from unittest.mock import AsyncMock
 except ImportError:
