@@ -10,6 +10,15 @@ from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
 from sanic.exceptions import ServerError
 from sanic.server.websockets.frame import WebsocketFrameAssembler
 
+@pytest.fixture
+def assembler():
+    return WebsocketFrameAssembler()
+
+@pytest.mark.parametrize("opcode", CTRL_OPCODES)
+def test_assemble_control_frame(opcode, assembler):
+    with pytest.raises(ServerError):
+        assembler.assemble_frame(opcode, b"payload")
+
 
 try:
     from unittest.mock import AsyncMock
