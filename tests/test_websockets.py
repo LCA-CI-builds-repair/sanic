@@ -8,7 +8,7 @@ import pytest
 from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
 
 from sanic.exceptions import ServerError
-from sanic.server.websockets.frame import WebsocketFrameAssembler
+from sanic.server.websocket.protocol import WebsocketFrameAssembler
 
 
 try:
