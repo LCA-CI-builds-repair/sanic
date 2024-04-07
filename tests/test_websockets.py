@@ -4,10 +4,12 @@ from asyncio import Event, Queue, TimeoutError
 from unittest.mock import Mock, call
 
 import pytest
+import os
 
-from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
+from unittest.mock import patch
 
 from sanic.exceptions import ServerError
+from sanic.logging import logger
 from sanic.server.websockets.frame import WebsocketFrameAssembler
 
 
