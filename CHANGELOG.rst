@@ -15,14 +15,31 @@ Version 21.6.1
   * `#2181 <https://github.com/sanic-org/sanic/pull/2181>`_
     Resolve regression in exception logging
   * `#2201 <https://github.com/sanic-org/sanic/pull/2201>`_
-    Cleanup request info in pipelined requests
+      `#1789 <https://github.com/sanic-org/sanic/pull/1789>`_
+    Fix tests using hosts yielding incorrect ``url_for``
+
+  *
+    `#1808 <https://github.com/sanic-org/sanic/pull/1808>`_
+     Fix Ctrl+C and tests on Windows
+
+**Deprecations and Removals**
+
+  *
+    New deprecation/removal item description hererequest info in pipelined requests
 
 Version 21.6.0
 --------------
 
 **Features**
 
-  * `#2094 <https://github.com/sanic-org/sanic/pull/2094>`_
+  * `#2094 <https://github.com/sanic-or  * Fix (1242): Responses for CI header (yunstanford)
+  * Fix (1237): add version constraint for websockets (yunstanford)
+  * Fix (1231): memory leak - always release resource (Phillip Xu)
+  * Fix (1221): make request truthy if transport exists (Raphael Deem)
+  * Fix failing tests for aiohttp>=3.1.0 (Ashley Sommer)
+  * Fix try_everything examples (PyManiacGR, kot83)
+  * Fix (1158): default to auto_reload in debug mode (Raphael Deem)
+  * Fix (1136): ErrorHandler.response handler call too restrictive (Julien Castiaux)pull/2094>`_
     Add ``response.eof()`` method for closing a stream in a handler
   * `#2097 <https://github.com/sanic-org/sanic/pull/2097>`_
     Allow case-insensitive HTTP Upgrade header

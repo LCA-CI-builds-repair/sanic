@@ -12,7 +12,10 @@ if TYPE_CHECKING:
 
 import sys
 
-from asyncio import CancelledError
+fr        if self._http is None or self._http.stage is Stage.IDLE:
+            self.close()
+            return True
+        return Falsecio import CancelledError
 from time import monotonic as current_time
 
 from sanic.exceptions import (
