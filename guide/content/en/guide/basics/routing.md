@@ -33,9 +33,27 @@
     async def handler(request):
         return text("OK")
 
-    app.add_route(handler, "/test")
-    ```
+    app.add# provide default strict_slashes value for all routes
+app = Sanic(__file__, strict_slashes=True)
 
+# Overwrite strict_slashes value for a specific route
+@app.get("/get", strict_slashes=False)
+def handler(request):
+    return text("OK")
+
+# It also works for blueprints
+bp = Blueprint(__file__, strict_slashes=True)
+
+@bp.get("/bp/get", strict_slashes=False)
+def handler(request):
+    return text("OK")
+
+bp1 = Blueprint(name="bp1", url_prefix="/bp1")
+bp2 = Blueprint(name="bp2", url_prefix="/bp2", strict_slashes=False)
+
+# This will enforce strict slashes check on routes under bp1 but ignore bp2
+# as it explicitly sets the strict slashes check to false
+group = Blueprint.group([bp1, bp2], strict_slashes=True)
 
 .. column::
 

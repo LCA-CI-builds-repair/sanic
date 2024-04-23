@@ -18,7 +18,58 @@ def double_dotted_directory_file(static_file_directory: str):
     if sys.platform == "win32":
         raise Exception("Windows doesn't support double dotted directories")
 
-    file_path = Path(static_file_directory) / "dotted.." / "dot.txt"
+    filimport logging
+from collections import Counter
+from sanic.exceptions import NotFound
+from sanic.response import text
+
+async def handleStaticDirError(request, exception):
+    if isinstance(exception, IsADirectoryError):
+        return text(error_text, status=403)
+    raise exception
+
+request, response = app.test_client.get("/static/")
+
+assert response.status == 403
+assert response.text == error_text
+
+def test_stack_trace_on_not_found(app, static_file_directory, caplog):
+    app.static("/static", static_file_directory)
+
+    with caplog.at_level(logging.INFO):
+        _, response = app.test_client.get("/static/non_existing_file.file")
+
+    counter = Counter([(r[0], r[1]) for r in caplog.record_tuples])
+
+    assert response.status == 404
+    assert counter[("sanic.root", logging.INFO)] == 10
+    assert counter[("sanic.root", logging.ERROR)] == 0
+    assert counter[("sanic.error", logging.ERROR)] == 0
+    assert counter[("sanic.server", logging.INFO)] == 3
+
+def test_no_stack_trace_on_not_found(app, static_file_directory, caplog):
+    app.static("/static", static_file_directory)
+
+    @app.exception(NotFound)
+    async def file_not_found(request, exception):
+        return text(f"No file: {request.path}", status=404)
+
+    with caplog.at_level(logging.INFO):
+        _, response = app.test_client.get("/static/non_existing_file.file")
+
+    counter = Counter([(r[0], r[1]) for r in caplog.record_tuples])
+
+    assert response.status == 404
+    assert counter[("sanic.root", logging.INFO)] == 10
+    assert counter[("sanic.root", logging.ERROR)] == 0
+    assert counter[("sanic.error", logging.ERROR)] == 0
+    assert counter[("sanic.server", logging.INFO)] == 3
+    assert response.text == "No file: /static/non_existing_file.file"
+
+@pytest.mark.asyncio
+async def test_multiple_statics_error(app, static_file_directory):
+    app.static("/file", get_file_path(static_file_directory, "test.file"))
+    app.static("/png", get_file_path(static_file_directory, "python.png"))/ "dot.txt"
     double_dotted_dir = file_path.parent
     Path.mkdir(double_dotted_dir, exist_ok=True)
     with open(file_path, "w") as f:
