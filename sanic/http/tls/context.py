@@ -3,7 +3,23 @@ from __future__ import annotations
 import os
 import ssl
 
-from typing import Any, Dict, Iterable, Optional, Union
+from typing import Any, Di    """Find the SSL context that matches the given SNI.
+
+    :param server_name: The server name to match for the certificate.
+    :raises ssl.SSLError: No matching certificate found.
+    :return: The matching ssl.SSLContext object if found."""
+    if not server_name:
+        if self.sanic_fallback:
+            return self.sanic_fallback
+        raise ValueError(
+            "No server name indication (SNI) provided by the client."
+        )
+    for ctx in self.sanic_select:
+        if match_hostname(ctx, server_name):
+            return ctx
+    if self.sanic_fallback:
+        return self.sanic_fallback
+    raise ValueError(f"No certificate found matching server name {server_name!r}")tional, Union
 
 from sanic.log import logger
 

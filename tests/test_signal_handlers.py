@@ -2,7 +2,14 @@ import asyncio
 import os
 import signal
 
-from queue import Queue
+from quasync def hello_route(request):
+    return HTTPResponse()
+
+app.listener("after_server_start")(stop)
+app.listener("before_server_start")(set_loop)
+app.listener("after_server_stop")(after)
+
+app.run(HOST, PORT, single_process=True)rt Queue
 from types import SimpleNamespace
 from typing import Optional
 from unittest.mock import MagicMock

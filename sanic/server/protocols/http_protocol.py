@@ -10,9 +10,19 @@ from sanic.touchup.meta import TouchUpMeta
 if TYPE_CHECKING:
     from sanic.app import Sanic
 
-import sys
+import sys        """
+        Close the connection if no request is being sent or received
 
-from asyncio import CancelledError
+        :return: boolean - True if closed, false if staying open
+        """
+        if self._http is None or self._http.stage is Stage.IDLE:
+            self.close()
+            return True
+        return False
+
+    # -------------------------------------------- #
+    # Only asyncio.Protocol callbacks below this
+    # -------------------------------------------- #o import CancelledError
 from time import monotonic as current_time
 
 from sanic.exceptions import (

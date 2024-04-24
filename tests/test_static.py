@@ -18,7 +18,30 @@ def double_dotted_directory_file(static_file_directory: str):
     if sys.platform == "win32":
         raise Exception("Windows doesn't support double dotted directories")
 
-    file_path = Path(static_file_directory) / "dotted.." / "dot.txt"
+    fil    async def handle_static_dir_error(request, exception):
+        if isinstance(exception, IsADirectoryError):
+            return text(error_text, status=403)
+        raise exception
+
+    request, response = app.test_client.get("/static/")
+
+    assert response.status == 403
+    assert response.text == error_text
+
+
+def test_stack_trace_on_not_found(app, static_file_directory, caplog):
+    app.static("/static", static_file_directory)
+
+    with caplog.at_level(logging.INFO):
+        _, response = app.test_client.get("/static/non_existing_file.file")
+
+    counter = Counter([(r[0], r[1]) for r in caplog.record_tuples])
+
+    assert response.status == 404
+    assert counter[("sanic.root", logging.INFO)] == 10
+    assert counter[("sanic.root", logging.ERROR)] == 0
+    assert counter[("sanic.error", logging.ERROR)] == 0
+    assert counter[("sanic.server", logging.INFO)] == 3e_directory) / "dotted.." / "dot.txt"
     double_dotted_dir = file_path.parent
     Path.mkdir(double_dotted_dir, exist_ok=True)
     with open(file_path, "w") as f:

@@ -2,9 +2,51 @@
 title: Sanic Extensions - Auto-documentation
 ---
 
-# Auto-documentation
-
-To make documenting endpoints easier, Sanic Extensions will use a function's docstring to populate your documentation. 
+# Auto-doc        ---
+        operationId: fooDots
+        tags:
+          - one
+          - two
+        parameters:
+          - name: limit
+            in: query
+            description: How many items to return at one time (max 100)
+            required: false
+            schema:
+              type: integer
+              format: int32
+        responses:
+          '200':
+            description: Just some dots
+        """
+        return text("...")
+    ```
+    ```json
+    "paths": {
+      "/foo": {
+        "get": {
+          "operationId": "fooDots",
+          "summary": "This is a simple foo handler",
+          "description": "Now we will add some more details",
+          "tags": [
+            "one",
+            "two"
+          ],
+          "parameters": [
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "How many items to return at one time (max 100)",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ]
+        }
+      }
+    }nts easier, Sanic Extensions will use a function's docstring to populate your documentation. 
 
 ## Summary and description
 

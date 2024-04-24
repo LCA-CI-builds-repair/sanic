@@ -1,6 +1,21 @@
 .. note::
 
-  CHANGELOG files are maintained in ``./docs/sanic/releases``. To view the full CHANGELOG, please visit https://sanic.readthedocs.io/en/stable/sanic/changelog.html.
+  CHANGELOG files are maintained in ``./docs/sanic/releases``. To view the   * `#2156 <https://github.com/sanic-org/sanic/pull/2156>`_
+    Remove config value REQUEST_BUFFER_QUEUE_SIZE
+  * `#2170 <https://github.com/sanic-org/s    `#2013 <https://github.com/sanic-org/sanic/pull/2013>`_
+    Add codeql to CI pipeline
+
+  *
+    `#2038 <https://github.com/sanic-org/sanic/pull/2038>`_
+    Codecov configuration updates
+
+  *
+    `#2049 <https://github.com/sanic-org/sanic/pull/2049>`_
+    Updated setup.py to use ``find_packages``
+
+**Improved Documentation**70>`_
+    ``CompositionView`` deprecated and marked for removal in 21.12
+  * `#2172 <https://github.com/sanic-org/sanic/pull/2172>`_HANGELOG, please visit https://sanic.readthedocs.io/en/stable/sanic/changelog.html.
 
 
 Version 21.6.1
@@ -9,8 +24,25 @@ Version 21.6.1
 **Bugfixes**
 
   * `#2178 <https://github.com/sanic-org/sanic/pull/2178>`_
-    Update sanic-routing to allow for better splitting of complex URI templates
-  * `#2183 <https://github.com/sanic-org/sanic/pull/2183>`_
+    Update sanic-routing to allow for better splitting of complex URI templat  * `#1529 <https://github.com/sanic-org/sanic/pull/1529>`_ Update project PyPI credentials
+  * `#1515 <https://gith  * Fix: broken tests for aiohttp >= 3.3.0 (Ashley Sommer)
+  * Fix: disable auto_reload by default on windows (abuckenheimer)
+  * Fix (1143): Turn off access log with gunicorn (hqy)
+  * Fix (1268): Support status code for file response (Cosmo Borsky)
+  * Fix (1266): Add content_type flag to Sanic.static (Cosmo Borsky)
+  * Fix: subprotocols parameter missing from add_websocket_route (ciscorn)
+  * Fix (1242): Responses for CI header (yunstanford)
+  * Fix (1237): add version constraint for websockets (yunstanford)
+  * Fix (1231): memory leak - always release resource (Phillip Xu)
+  * Fix (1221): make request truthy if transport exists (Raphael Deem)
+  * Fix failing tests for aiohttp>=3.1.0 (Ashley Sommer)
+  * Fix try_everything examples (PyManiacGR, kot83)
+  * Fix (1158): default to auto_reload in debug mode (Raphael Deem)
+  * Fix (1136): ErrorHandler.response handler call too restrictive (Julien Castiaux)
+  * Fix: raw requires bytes-like object (cloudship)g/sanic/pull/1515>`_ Fix linter issue causing travis build failures (fix #1514)
+  * `#1490 <https://github.com/sanic-org/sanic/pull/1490>`_ Fix python version in doc build
+  * `#1478 <https://github.com/sanic-org/sanic/pull/1478>`_ Upgrade setuptools version and use native docutils in doc build
+  * `#1464 <https://github.com/sanic-org/sanic/pull/1464>`_ Upgrade pytest, and fix caplog unit tests `#2183 <https://github.com/sanic-org/sanic/pull/2183>`_
     Proper handling of chunked request bodies to resolve phantom 503 in logs
   * `#2181 <https://github.com/sanic-org/sanic/pull/2181>`_
     Resolve regression in exception logging

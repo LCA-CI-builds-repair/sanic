@@ -33,8 +33,8 @@
     async def handler(request):
         return text("OK")
 
-    app.add_route(handler, "/test")
-    ```
+    app.add# Provide default strict_slashes value for all routes
+app = Sanic(__file__, strict_slashes=True)
 
 
 .. column::
