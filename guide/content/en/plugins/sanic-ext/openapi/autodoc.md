@@ -2,9 +2,24 @@
 title: Sanic Extensions - Auto-documentation
 ---
 
-# Auto-documentation
-
-To make documenting endpoints easier, Sanic Extensions will use a function's docstring to populate your documentation. 
+# Auto-documentation            schema:
+              type: integer
+              format: int32
+        responses:
+          '200':
+            description: Successful response
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: 'Success'
+          '400':
+            description: Bad request
+          '404':
+            description: Not found make documenting endpoints easier, Sanic Extensions will use a function's docstring to populate your documentation. 
 
 ## Summary and description
 

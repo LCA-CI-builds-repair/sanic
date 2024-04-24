@@ -1,4 +1,13 @@
-.. include:: ../README.rst
+.. inclu==============
+Documentation
+==============
+
+.. toctree::
+   :maxdepth: 3
+
+   introduction
+   installation
+   usage ../README.rst
 
 User Guide
 ==========

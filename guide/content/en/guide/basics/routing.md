@@ -34,8 +34,10 @@
         return text("OK")
 
     app.add_route(handler, "/test")
+    `````
+    ```python
+    group = Blueprint.group([bp1, bp2], strict_slashes=True)
     ```
-
 
 .. column::
 

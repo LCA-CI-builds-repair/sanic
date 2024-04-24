@@ -2,7 +2,23 @@ import asyncio
 import os
 import signal
 
-from queue import Queue
+frodef test_register_system_signals(app):
+    """Test if Sanic registers system signals"""
+
+    @app.rdef test_signals_with_invalid_invocation(app):ute("/hello")
+    async def hello_route(request):
+        return HTTPResponse()
+
+    app.listener("after_server_start")(stop)
+    app.listener("before_server_start")(set_loop)
+    app.listener("after_server_stop")(after)
+
+    app.run(HOST, PORT, single_process=True)
+    assert calledq.get() is True
+
+
+@pytest.mark.skipif(os.name == "nt", reason="May hang CI on py38/windows")
+def test_no_register_system_signals_fails(app):eue
 from types import SimpleNamespace
 from typing import Optional
 from unittest.mock import MagicMock

@@ -12,7 +12,10 @@ if TYPE_CHECKING:
 
 import sys
 
-from asyncio import CancelledError
+fr        """
+        HTTP Protocol implementation for Sanic server.
+        This class handles the HTTP protocol logic for incoming requests.
+        """m asyncio import CancelledError
 from time import monotonic as current_time
 
 from sanic.exceptions import (

@@ -5,7 +5,11 @@
 
 .. column::
 
-    Sanic holds the configuration in the config attribute of the application object. The configuration object is merely an object that can be modified either using dot-notation or like a dictionary.
+    Sanic hol```
+    ```python
+    >>> print(app.config.REQUEST_TIMEOUT)
+    10
+    ```the configuration in the config attribute of the application object. The configuration object is merely an object that can be modified either using dot-notation or like a dictionary.
 
 .. column::
 

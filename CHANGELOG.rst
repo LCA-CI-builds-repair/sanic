@@ -1,24 +1,28 @@
 .. note::
 
-  CHANGELOG files are maintained in ``./docs/sanic/releases``. To view the full CHANGELOG, please visit https://sanic.readthedocs.io/en/stable/sanic/changelog.html.
+  CHANGELOG files are maintained in ``./docs/sanic/releases``. To view the full CHANGE- Remove Travis CI in favor of GitHub ActionsOG, please visit https://sanic.readthedocs.io/en/stable/sanic/changelog.html.
 
 
 Version 21.6.1
---------------
+--- `#2013 <https://github.com/sanic-org/sanic/pull/2013>`_
+  Add CodeQL to CI pipeline----------
 
 **Bugfixes**
 
   * `#2178 <https://github.com/sanic-org/sanic/pull/2178>`_
     Update sanic-routing to allow for better splitting of complex URI templates
   * `#2183 <https://github.com/sanic-org/sanic/pull/2183>`_
-    Proper handling of chunked request bodies to resolve phantom 503 in logs
+    Proper handling of chunked request bod- `#1852 <https://github.com/sanic-org/sanic/pull/1852>`_
+  Fix naming of CI test env on Python nightliess to resolve phantom 503 in logs
   * `#2181 <https://github.com/sanic-org/sanic/pull/2181>`_
     Resolve regression in exception logging
   * `#2201 <https://github.com/sanic-org/sanic/pull/2201>`_
     Cleanup request info in pipelined requests
 
 Version 21.6.0
---------------
+------------- `#1490 <https://github.com/sanic-org/sanic- Add missed documentation for config section.
+- Deprecate Handler.logull/1490>`_
+  Fix python version in doc build-
 
 **Features**
 
