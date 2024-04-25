@@ -273,6 +273,12 @@ class HttpProtocol(HttpProtocolMixin, SanicProtocol, metaclass=TouchUpMeta):
 
     def connection_made(self, transport):
         """
+        Called when a connection is established.
+
+        :param transport: asyncio.Transport
+        """
+        self.transport = transport
+        """
         HTTP-protocol-specific new connection handler
         """
         try:
