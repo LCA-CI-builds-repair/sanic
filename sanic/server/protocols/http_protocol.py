@@ -272,6 +272,14 @@ class HttpProtocol(HttpProtocolMixin, SanicProtocol, metaclass=TouchUpMeta):
     # -------------------------------------------- #
 
     def connection_made(self, transport):
+        self.transport = transport
+
+    def data_received(self, data):
+        self._request_data += data
+        if self._request_data and not self._request:
+            self._request = HTTPRequest(
+                self, self._request_data, self.connection_info()
+            )
         """
         HTTP-protocol-specific new connection handler
         """

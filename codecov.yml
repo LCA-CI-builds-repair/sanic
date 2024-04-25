@@ -11,7 +11,7 @@ coverage:
         threshold: 0.5
   precision: 3
 codecov:
-  require_ci_to_pass: false
+  require_ci_to_pass: true
 ignore:
   - "sanic/__main__.py"
   - "sanic/compat.py"

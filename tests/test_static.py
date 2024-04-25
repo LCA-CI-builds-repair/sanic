@@ -515,7 +515,6 @@ def test_stack_trace_on_not_found(app, static_file_directory, caplog):
         _, response = app.test_client.get("/static/non_existing_file.file")
 
     counter = Counter([(r[0], r[1]) for r in caplog.record_tuples])
-
     assert response.status == 404
     assert counter[("sanic.root", logging.INFO)] == 10
     assert counter[("sanic.root", logging.ERROR)] == 0
@@ -527,6 +526,8 @@ def test_no_stack_trace_on_not_found(app, static_file_directory, caplog):
     app.static("/static", static_file_directory)
 
     @app.exception(FileNotFound)
+    def handle_not_found(request, exception):
+        return response.json({"error": "File not found"}, status=404)
     async def file_not_found(request, exception):
         return text(f"No file: {request.path}", status=404)
 
@@ -534,7 +535,6 @@ def test_no_stack_trace_on_not_found(app, static_file_directory, caplog):
         _, response = app.test_client.get("/static/non_existing_file.file")
 
     counter = Counter([(r[0], r[1]) for r in caplog.record_tuples])
-
     assert response.status == 404
     assert counter[("sanic.root", logging.INFO)] == 10
     assert counter[("sanic.root", logging.ERROR)] == 0
@@ -543,6 +543,11 @@ def test_no_stack_trace_on_not_found(app, static_file_directory, caplog):
     assert response.text == "No file: /static/non_existing_file.file"
 
 
+@pytest.mark.asyncio
+async def test_static_file_not_found(app, client):
+    response = await client.get("/static/non_existing_file.file")
+    assert response.status == 404
+    assert "No file: /static/non_existing_file.file" in response.text
 @pytest.mark.asyncio
 async def test_multiple_statics_error(app, static_file_directory):
     app.static("/file", get_file_path(static_file_directory, "test.file"))
