@@ -155,20 +155,35 @@ def test_create_server_trigger_events(app):
         flag2 = True
 
     async def after_stop(app, loop):
-        nonlocal flag3
-        flag3 = True
+import asyncio
+import signal
+from contextlib import closing
+from socket import socket
 
-    app.listener("after_server_start")(stop)
-    app.listener("before_server_stop")(before_stop)
-    app.listener("after_server_stop")(after_stop)
+def stop_on_alarm(signum, frame):
+    loop.stop()
 
-    loop = asyncio.get_event_loop()
+def stop():
+    nonlocal flag3
+    flag3 = True
 
-    # Use random port for tests
+def before_stop():
+    pass
 
-    signal.signal(signal.SIGALRM, stop_on_alarm)
-    signal.alarm(1)
-    with closing(socket()) as sock:
+def after_stop():
+    pass
+
+app.listener("after_server_start")(stop)
+app.listener("before_server_stop")(before_stop)
+app.listener("after_server_stop")(after_stop)
+
+loop = asyncio.get_event_loop()
+
+# Use random port for tests
+
+signal.signal(signal.SIGALRM, stop_on_alarm)
+signal.alarm(1)
+with closing(socket()) as sock:
         sock.bind(("127.0.0.1", 0))
 
         serv_coro = app.create_server(

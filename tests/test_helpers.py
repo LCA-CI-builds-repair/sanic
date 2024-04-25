@@ -20,14 +20,16 @@ def test_has_message_body():
 
 
 def test_is_entity_header():
-    tests = (
-        ("allow", True),
-        ("extension-header", True),
-        ("", False),
-        ("test", False),
-    )
-    for header, expected in tests:
-        assert helpers.is_entity_header(header) is expected
+import helpers
+
+tests = (
+    ("allow", True),
+    ("extension-header", True),
+    ("", False),
+    ("test", False),
+)
+for header, expected in tests:
+    assert helpers.is_entity_header(header) is expected
 
 
 def test_is_hop_by_hop_header():
