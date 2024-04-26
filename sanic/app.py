@@ -1979,6 +1979,7 @@ class Sanic(
 
     @asgi.setter
     def asgi(self, value: bool):
+        """Set whether the app is running in ASGI mode."""
         self.state.asgi = value
 
     @property

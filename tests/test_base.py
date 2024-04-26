@@ -42,6 +42,7 @@ def test_bp_repr_with_values(bp):
         'Blueprint(name="my_bp", url_prefix="/foo", host="example.com", '
         "version=3, strict_slashes=True)"
     )
+    )
 
 
 @pytest.mark.parametrize(

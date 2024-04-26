@@ -62,7 +62,7 @@ class Lifespan:
         if not isinstance(self.sanic_app.config.USE_UVLOOP, Default):
             warnings.warn(
                 "You have set the USE_UVLOOP configuration option, but Sanic "
-                "cannot control the event loop when running in ASGI mode."
+                "cannot control the event loop when running in ASGI mode.",
                 "This option will be ignored."
             )
 

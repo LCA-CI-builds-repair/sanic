@@ -20,6 +20,9 @@ def test_has_message_body():
 
 
 def test_is_entity_header():
+import helpers
+
+def test_is_entity_header():
     tests = (
         ("allow", True),
         ("extension-header", True),
@@ -28,7 +31,6 @@ def test_is_entity_header():
     )
     for header, expected in tests:
         assert helpers.is_entity_header(header) is expected
-
 
 def test_is_hop_by_hop_header():
     tests = (
@@ -42,8 +44,6 @@ def test_is_hop_by_hop_header():
 
 
 def test_remove_entity_headers():
-    tests = (
-        ({}, {}),
         ({"Allow": "GET, POST, HEAD"}, {}),
         (
             {
