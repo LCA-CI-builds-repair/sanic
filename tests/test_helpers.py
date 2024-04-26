@@ -1,25 +1,25 @@
 import inspect
-
 import pytest
 
-from sanic import helpers
+from sanic.helpers import has_message_body
 from sanic.config import Config
 
 
 def test_has_message_body():
+    # Test cases for checking if a message body is expected based on the status code
     tests = (
-        (100, False),
-        (102, False),
-        (204, False),
-        (200, True),
-        (304, False),
-        (400, True),
+        (100, False),  # Continue response should not have a message body
+        (102, False),  # Processing response should not have a message body
+        (204, False),  # No Content response should not have a message body
+        (200, True),   # OK response should have a message body
+        (304, False),  # Not Modified response should not have a message body
+        (400, True),   # Bad Request response should have a message body
     )
     for status_code, expected in tests:
-        assert helpers.has_message_body(status_code) is expected
-
-
+        assert has_message_body(status_code) is expected
 def test_is_entity_header():
+def test_is_entity_header():
+    # Test cases for checking if a header is an entity header
     tests = (
         ("allow", True),
         ("extension-header", True),
@@ -31,6 +31,7 @@ def test_is_entity_header():
 
 
 def test_is_hop_by_hop_header():
+    # Test cases for checking if a header is a hop-by-hop header
     tests = (
         ("connection", True),
         ("upgrade", True),
@@ -39,8 +40,6 @@ def test_is_hop_by_hop_header():
     )
     for header, expected in tests:
         assert helpers.is_hop_by_hop_header(header) is expected
-
-
 def test_remove_entity_headers():
     tests = (
         ({}, {}),

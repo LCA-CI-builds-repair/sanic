@@ -49,8 +49,6 @@ def test_raises_warning_if_uvloop_not_installed(caplog):
         "configuration value to false. Sanic will now continue "
         "to run with the default event loop."
     )
-
-
 @pytest.mark.skipif(
     OS_IS_WINDOWS or not UVLOOP_INSTALLED,
     reason="Not testable with current client",

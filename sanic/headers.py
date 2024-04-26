@@ -276,6 +276,8 @@ class AcceptList(list):
         header entry `MediaType` or `None` is available as the `m` attribute.
 
         Args:
+from typing import List
+
             mimes (List[str]): Any MIME types to search for in order of preference.
             accept_wildcards (bool): Match Accept entries with wildcards in them.
 
@@ -292,9 +294,7 @@ class AcceptList(list):
         return Matched(*(a[0][-2:] if a else ("", None)))
 
     def __str__(self):
-        """Format as Accept header value (parsed, not original)."""
-        return ", ".join(str(m) for m in self)
-
+from typing import Optional
 
 def parse_accept(accept: Optional[str]) -> AcceptList:
     """Parse an Accept header and order the acceptable media types according to RFC 7231, s. 5.3.2
@@ -305,6 +305,7 @@ def parse_accept(accept: Optional[str]) -> AcceptList:
         accept (str): The Accept header value to parse.
 
     Returns:
+        AcceptList: A list of MediaType objects, ordered by preference.
         AcceptList: A list of MediaType objects, ordered by preference.
 
     Raises:

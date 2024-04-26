@@ -515,6 +515,7 @@ def test_stack_trace_on_not_found(app, static_file_directory, caplog):
         _, response = app.test_client.get("/static/non_existing_file.file")
 
     counter = Counter([(r[0], r[1]) for r in caplog.record_tuples])
+import logging
 
     assert response.status == 404
     assert counter[("sanic.root", logging.INFO)] == 10
@@ -534,6 +535,7 @@ def test_no_stack_trace_on_not_found(app, static_file_directory, caplog):
         _, response = app.test_client.get("/static/non_existing_file.file")
 
     counter = Counter([(r[0], r[1]) for r in caplog.record_tuples])
+import logging
 
     assert response.status == 404
     assert counter[("sanic.root", logging.INFO)] == 10
@@ -543,6 +545,7 @@ def test_no_stack_trace_on_not_found(app, static_file_directory, caplog):
     assert response.text == "No file: /static/non_existing_file.file"
 
 
+@pytest.mark.asyncio
 @pytest.mark.asyncio
 async def test_multiple_statics_error(app, static_file_directory):
     app.static("/file", get_file_path(static_file_directory, "test.file"))

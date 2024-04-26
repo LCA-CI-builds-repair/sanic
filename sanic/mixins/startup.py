@@ -889,6 +889,9 @@ class StartupMixin(metaclass=SanicMeta):
         """Retrieve the host address and port, with default values based on the given parameters.
 
         Args:
+from typing import Optional
+from sanic.http import HTTPVersion
+
             host (Optional[str]): Host IP or FQDN for the service to use. Defaults to `"127.0.0.1"`.
             port (Optional[int]): Port number. Defaults to `8443` if version is 3 or `auto_tls=True`, else `8000`
             version (HTTPVersion, optional): HTTP Version. Defaults to `HTTP.VERSION_1` (HTTP/1.1).

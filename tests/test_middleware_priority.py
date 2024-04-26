@@ -143,8 +143,6 @@ def test_request_middleware_order_priority(app: Sanic, expected, priorities):
     app.test_client.get("/")
 
     assert order == expected
-
-
 @pytest.mark.parametrize(
     "expected,priorities",
     PRIORITY_TEST_CASES,

@@ -151,15 +151,16 @@ class Http(Stream, metaclass=TouchUpMeta):
                 # Limit the size because the handler may have set it infinite
                 self.request_max_size = min(
                     self.request_max_size, self.protocol.request_max_size
+import some_module_containing_PayloadTooLarge_exception
+
                 )
                 try:
                     async for _ in self:
                         pass
                 except PayloadTooLarge:
-                    # We won't read the body and that may cause httpx and
-                    # tests to fail. This little delay allows clients to push
-                    # a small request into network buffers before we close the
-                    # socket, so that they are then able to read the response.
+                    # Handle the PayloadTooLarge exception by allowing a small delay
+                    # to ensure clients can push a small request into network buffers
+                    # before closing the socket, enabling them to read the response.
                     await sleep(0.001)
                     self.keep_alive = False
 

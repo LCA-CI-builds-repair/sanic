@@ -27,8 +27,6 @@ def _compile_sidebar_order(items: list[MenuItem]) -> list[str]:
         if item.items:
             order.extend(_compile_sidebar_order(item.items))
     return order
-
-
 def create_app(root: Path) -> Sanic:
     app = Sanic("Documentation")
     app.config.PUBLIC_DIR = root / "public"

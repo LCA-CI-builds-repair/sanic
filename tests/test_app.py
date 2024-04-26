@@ -532,6 +532,9 @@ def test_multiple_uvloop_configs_display_warning(caplog):
             loop.run_until_complete(srv.startup())
 
     message = (
+import logging
+from collections import Counter
+
         "It looks like you're running several apps with different "
         "uvloop settings. This is not supported and may lead to "
         "unintended behaviour."
@@ -539,9 +542,8 @@ def test_multiple_uvloop_configs_display_warning(caplog):
 
     counter = Counter([(r[1], r[2]) for r in caplog.record_tuples])
 
+    # Check if the warning message about running apps with different uvloop settings occurs 3 times
     assert counter[(logging.WARNING, message)] == 3
-
-
 def test_cannot_run_fast_and_workers(app: Sanic):
     message = "You cannot use both fast=True and workers=X"
     with pytest.raises(RuntimeError, match=message):

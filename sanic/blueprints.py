@@ -750,6 +750,15 @@ class BlueprintGroup(bpg_base):
         return self._strict_slashes
 
     @property
+import typing
+from typing import Optional, Iterator
+
+class Blueprint:
+    def __init__(self, version_prefix: str, name_prefix: Optional[str]):
+        self._version_prefix = version_prefix
+        self._name_prefix = name_prefix
+        self._blueprints = []
+
     def version_prefix(self) -> str:
         """Version prefix for the Blueprint Group.
 
@@ -777,8 +786,6 @@ class BlueprintGroup(bpg_base):
             Iterator[Blueprint]: Iterator for the list of blueprints in
         """
         return iter(self._blueprints)
-
-    @overload
     def __getitem__(self, item: int) -> Blueprint:
         ...
 

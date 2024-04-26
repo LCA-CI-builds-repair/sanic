@@ -1,6 +1,7 @@
 from sanic import Blueprint, Sanic
+from sanic import Sanic
+from sanic.blueprints import Blueprint
 from sanic.response import text
-
 
 """
 Demonstrates that blueprint request middleware are executed in the order they
@@ -15,14 +16,12 @@ bp = Blueprint("bp_example")
 
 @bp.on_request
 def request_middleware_1(request):
-    print("1")
+    print("1")  # Middleware 1
 
 
 @bp.on_request
 def request_middleware_2(request):
-    print("2")
-
-
+    print("2")  # Middleware 2
 @bp.on_request
 def request_middleware_3(request):
     print("3")

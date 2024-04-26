@@ -285,13 +285,10 @@ def test_blueprint_group_insert():
     app.router.finalize()
 
     routes = [(route.path, route.strict) for route in app.router.routes]
-
     assert len(routes) == 3
     assert ("v1/test/bp1/", True) in routes
     assert ("v1.3/test/bp2", False) in routes
     assert ("v1.3/test", False) in routes
-
-
 def test_bp_group_properties():
     blueprint_1 = Blueprint("blueprint_1", url_prefix="/bp1")
     blueprint_2 = Blueprint("blueprint_2", url_prefix="/bp2")

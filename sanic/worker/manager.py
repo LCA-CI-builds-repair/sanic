@@ -197,15 +197,16 @@ class WorkerManager:
         """Restart the worker processes.
 
         Args:
+from typing import List
+
             process_names (Optional[List[str]], optional): The names of the processes to restart.
                 If `None` then all processes will be restarted. Defaults to `None`.
             restart_order (RestartOrder, optional): The order in which to restart the processes.
                 Defaults to `RestartOrder.SHUTDOWN_FIRST`.
         """  # noqa: E501
         for process in self.transient_processes:
-            if not process_names or process.name in process_names:
+            if process_names is None or process.name in process_names:
                 process.restart(restart_order=restart_order, **kwargs)
-
     def scale(self, num_worker: int):
         if num_worker <= 0:
             raise ValueError("Cannot scale to 0 workers.")
@@ -266,7 +267,9 @@ class WorkerManager:
                     reloaded_files = (
                         split_message[1] if len(split_message) > 1 else None
                     )
-                    process_names = [
+from typing import Optional
+from some_module_containing_RestartOrder import RestartOrder
+
                         name.strip() for name in processes.split(",")
                     ]
                     if "__ALL_PROCESSES__" in process_names:
@@ -279,6 +282,7 @@ class WorkerManager:
                     self.restart(
                         process_names=process_names,
                         reloaded_files=reloaded_files,
+                        restart_order=order,
                         restart_order=order,
                     )
                 self._sync_states()
