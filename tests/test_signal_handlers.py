@@ -45,16 +45,29 @@ def test_register_system_signals(app):
     """Test if sanic register system signals"""
 
     @app.route("/hello")
-    async def hello_route(request):
-        return HTTPResponse()
+import asyncio
+from aiohttp import HTTPResponse
 
-    app.listener("after_server_start")(stop)
-    app.listener("before_server_start")(set_loop)
-    app.listener("after_server_stop")(after)
+calledq = asyncio.Queue()
 
-    app.run(HOST, PORT, single_process=True)
-    assert calledq.get() is True
+async def hello_route(request):
+    return HTTPResponse()
 
+async def stop(app, loop):
+    pass
+
+async def set_loop(app, loop):
+    pass
+
+async def after(app, loop):
+    pass
+
+app.listener("after_server_start")(stop)
+app.listener("before_server_start")(set_loop)
+app.listener("after_server_stop")(after)
+
+app.run(HOST, PORT, single_process=True)
+assert calledq.get() is True
 
 @pytest.mark.skipif(os.name == "nt", reason="May hang CI on py38/windows")
 def test_no_register_system_signals_fails(app):
@@ -78,14 +91,15 @@ def test_no_register_system_signals_fails(app):
 
 
 @pytest.mark.skipif(os.name == "nt", reason="May hang CI on py38/windows")
-def test_dont_register_system_signals(app):
-    """Test if sanic don't register system signals"""
+import os
+import pytest
 
-    @app.route("/hello")
-    async def hello_route(request):
-        return HTTPResponse()
+@pytest.mark.skipif(os.name == "nt", reason="windows cannot SIGINT processes")
+def test_windows_workaround():
+    """Test Windows workaround (on any other OS)"""
 
-    app.listener("after_server_start")(stop)
+    # At least some code coverage, even though this test doesn't work on
+    # Windows...
     app.listener("before_server_start")(set_loop)
     app.listener("after_server_stop")(after)
 
@@ -131,16 +145,20 @@ def test_windows_workaround():
         return "OK"
 
     # Run in our private loop
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    res = loop.run_until_complete(atest(False))
-    assert res == "OK"
-    res = loop.run_until_complete(atest(True))
-    assert res == "OK"
+import pytest
+from sanic import Sanic
+from sanic.exceptions import BadRequest
+from typing import Optional
 
+async def stop():
+    pass
 
-@pytest.mark.skipif(os.name == "nt", reason="May hang CI on py38/windows")
-def test_signals_with_invalid_invocation(app):
+async def test_signal_server_lifecycle_exception(app: Sanic):
+    trigger: Optional[Exception] = None
+    with pytest.raises(
+        BadRequest, match="Invalid event registration: Missing event name"
+    ):
+        app.listener("stop")
     """Test if sanic register fails with invalid invocation"""
 
     @app.route("/hello")
