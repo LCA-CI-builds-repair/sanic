@@ -39,11 +39,11 @@ def after(app, loop):
     print("...")
     calledq.put(mock.called)
 
-
 @pytest.mark.skipif(os.name == "nt", reason="May hang CI on py38/windows")
 def test_register_system_signals(app):
     """Test if sanic register system signals"""
 
+    @app.route("/hello")
     @app.route("/hello")
     async def hello_route(request):
         return HTTPResponse()
@@ -58,7 +58,6 @@ def test_register_system_signals(app):
 
 @pytest.mark.skipif(os.name == "nt", reason="May hang CI on py38/windows")
 def test_no_register_system_signals_fails(app):
-    """Test if sanic don't register system signals"""
 
     @app.route("/hello")
     async def hello_route(request):
@@ -131,6 +130,7 @@ def test_windows_workaround():
         return "OK"
 
     # Run in our private loop
+    # Run in our private loop
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     res = loop.run_until_complete(atest(False))
@@ -140,7 +140,6 @@ def test_windows_workaround():
 
 
 @pytest.mark.skipif(os.name == "nt", reason="May hang CI on py38/windows")
-def test_signals_with_invalid_invocation(app):
     """Test if sanic register fails with invalid invocation"""
 
     @app.route("/hello")

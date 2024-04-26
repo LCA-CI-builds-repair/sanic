@@ -271,7 +271,7 @@ def test_request_middleware_executes_once(app):
     @app.middleware("request")
     async def inc(request):
         nonlocal i
-        next(i)
+        i += 1
 
     @app.route("/")
     async def handler(request):

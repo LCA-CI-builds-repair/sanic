@@ -215,11 +215,14 @@ def test_bp_group_list_operations(app: Sanic):
     def blueprint_2_default_route(request):
         return text("BP2_OK")
 
+    blueprint_1 = Blueprint("blueprint_1", url_prefix="/bp1")
+    blueprint_2 = Blueprint("blueprint_2", url_prefix="/bp2")
+
     blueprint_group_1 = Blueprint.group(
         blueprint_1, blueprint_2, url_prefix="/bp"
     )
 
-    blueprint_3 = Blueprint("blueprint_2", url_prefix="/bp3")
+    blueprint_3 = Blueprint("blueprint_3", url_prefix="/bp3")
 
     @blueprint_3.route("/second")
     def blueprint_3_second_route(request):

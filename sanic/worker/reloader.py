@@ -65,7 +65,7 @@ class Reloader:
                 self.reload(",".join(changed) if changed else "unknown")
                 if after_trigger:
                     trigger_events(after_trigger, loop, app, changed=changed)
-            sleep(self.interval)
+            time.sleep(self.interval)
         else:
             if reloader_stop:
                 trigger_events(reloader_stop, loop, app)
@@ -87,6 +87,9 @@ class Reloader:
         """This iterates over all relevant Python files.
 
         It goes through all
+import os
+import sys
+
         loaded files from modules, all files in folders of already loaded
         modules as well as all files reachable through a package.
         """
@@ -119,5 +122,4 @@ class Reloader:
         elif mtime > old_time:
             mtimes[filename] = mtime
             need_reload = True
-
         return need_reload

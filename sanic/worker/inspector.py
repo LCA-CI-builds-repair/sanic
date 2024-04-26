@@ -45,7 +45,7 @@ class Inspector:
         port: int,
         api_key: str,
         tls_key: Union[Path, str, Default],
-        tls_cert: Union[Path, str, Default],
+        tls_cert: Union[Path, str, Default]
     ):
         self._publisher = publisher
         self.app_info = app_info
@@ -66,7 +66,7 @@ class Inspector:
                 host=self.host,
                 port=self.port,
                 single_process=True,
-                ssl={"key": self.tls_key, "cert": self.tls_cert}
+                ssl={"key": self.tls_key, "cert": self.tls_cert},
                 if not isinstance(self.tls_key, Default)
                 and not isinstance(self.tls_cert, Default)
                 else None,
