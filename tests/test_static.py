@@ -525,7 +525,8 @@ def test_stack_trace_on_not_found(app, static_file_directory, caplog):
 
 def test_no_stack_trace_on_not_found(app, static_file_directory, caplog):
     app.static("/static", static_file_directory)
-
+    response = app.test_client.get("/nonexistent")
+    assert response.status == 404
     @app.exception(FileNotFound)
     async def file_not_found(request, exception):
         return text(f"No file: {request.path}", status=404)
