@@ -62,6 +62,7 @@ class Reloader:
             if changed:
                 if before_trigger:
                     trigger_events(before_trigger, loop, app)
+                    # Add the necessary implementation or continuation here after the 'trigger_events' function call
                 self.reload(",".join(changed) if changed else "unknown")
                 if after_trigger:
                     trigger_events(after_trigger, loop, app, changed=changed)

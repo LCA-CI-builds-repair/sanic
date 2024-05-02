@@ -44,6 +44,10 @@ def after(app, loop):
 def test_register_system_signals(app):
     """Test if sanic register system signals"""
 
+import os
+from sanic.response import HTTPResponse
+
+def test_signal_handlers():
     @app.route("/hello")
     async def hello_route(request):
         return HTTPResponse()
@@ -55,9 +59,9 @@ def test_register_system_signals(app):
     app.run(HOST, PORT, single_process=True)
     assert calledq.get() is True
 
-
 @pytest.mark.skipif(os.name == "nt", reason="May hang CI on py38/windows")
 def test_no_register_system_signals_fails(app):
+    # Test implementation goes here
     """Test if sanic don't register system signals"""
 
     @app.route("/hello")
