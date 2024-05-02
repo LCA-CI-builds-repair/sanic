@@ -173,7 +173,6 @@ async def test_dispatch_signal_triggers_multiple_handlers(app):
         counter += 1
 
     app.signal_router.finalize()
-
     assert len(app.signal_router.routes) == 3
     await app.dispatch("foo.bar.baz")
     assert counter == 2
@@ -181,6 +180,7 @@ async def test_dispatch_signal_triggers_multiple_handlers(app):
 
 @pytest.mark.asyncio
 async def test_dispatch_signal_triggers_multiple_events(app):
+    pass
     @app.signal("foo.bar.baz")
     def sync_signal(*_):
         pass

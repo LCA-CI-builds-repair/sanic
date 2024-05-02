@@ -714,15 +714,17 @@ def send_response_after_eof_should_fail(
         assert message_in_records(caplog.records, error_msg2)
 
 
+import datetime
+
 @pytest.mark.parametrize(
     "file_name", ["test.file", "decode me.txt", "python.png"]
 )
 def test_file_response_headers(
     app: Sanic, file_name: str, static_file_directory: str
 ):
-    test_last_modified = datetime.now()
+    test_last_modified = datetime.datetime.now()
     test_max_age = 10
-    test_expires = test_last_modified.timestamp() + test_max_age
+    test_expires = int(test_last_modified.timestamp() + test_max_age)
 
     @app.route("/files/cached/<filename>", methods=["GET"])
     def file_route_cache(request: Request, filename: str):
