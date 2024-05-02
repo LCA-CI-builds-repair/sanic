@@ -39,7 +39,7 @@ def test_bp_repr_with_values(bp):
     bp.version = 3
     bp.strict_slashes = True
     assert repr(bp) == (
-        'Blueprint(name="my_bp", url_prefix="/foo", host="example.com", '
+        'Blueprint(name="my_bp", url_prefix="/foo", host="example.com",)'
         "version=3, strict_slashes=True)"
     )
 
