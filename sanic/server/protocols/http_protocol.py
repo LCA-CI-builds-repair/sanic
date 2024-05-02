@@ -270,7 +270,6 @@ class HttpProtocol(HttpProtocolMixin, SanicProtocol, metaclass=TouchUpMeta):
     # -------------------------------------------- #
     # Only asyncio.Protocol callbacks below this
     # -------------------------------------------- #
-
     def connection_made(self, transport):
         """
         HTTP-protocol-specific new connection handler

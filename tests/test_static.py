@@ -551,9 +551,10 @@ async def test_multiple_statics_error(app, static_file_directory):
     message = (
         r"Duplicate route names detected: test_multiple_statics_error\.static"
     )
-    with pytest.raises(ServerError, match=message):
-        await app._startup()
+import pytest
 
+with pytest.raises(ServerError, match=message):
+    await app._startup()
 
 def test_multiple_statics(app, static_file_directory):
     app.static(
