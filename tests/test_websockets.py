@@ -67,6 +67,7 @@ async def test_ws_frame_get_message():
 @pytest.mark.asyncio
 async def test_ws_frame_get_message_with_timeout():
     assembler = WebsocketFrameAssembler(Mock())
+    assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.wait = AsyncMock(return_value=True)
     assembler.message_complete.is_set = Mock(return_value=True)
     data = await assembler.get(0.1)
@@ -102,9 +103,10 @@ async def test_ws_frame_get_not_completed():
 @pytest.mark.asyncio
 async def test_ws_frame_get_not_completed_start():
     assembler = WebsocketFrameAssembler(Mock())
-    assembler.message_complete = AsyncMock(spec=Event)
+    assembler.message_complete = AsyncMock()
     assembler.message_complete.is_set = Mock(side_effect=[False, True])
-    data = await assembler.get(0.1)
+    with pytest.raises(TimeoutError):
+        await assembler.get(0.1)
 
     assert data is None
 
@@ -112,7 +114,7 @@ async def test_ws_frame_get_not_completed_start():
 @pytest.mark.asyncio
 async def test_ws_frame_get_paused():
     assembler = WebsocketFrameAssembler(Mock())
-    assembler.message_complete = AsyncMock(spec=Event)
+    assembler.message_complete = AsyncMock()
     assembler.message_complete.is_set = Mock(side_effect=[False, True])
     assembler.paused = True
     data = await assembler.get()
