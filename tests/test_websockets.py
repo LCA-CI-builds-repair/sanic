@@ -3,19 +3,30 @@ import re
 from asyncio import Event, Queue, TimeoutError
 from unittest.mock import Mock, call
 
-import pytest
-
-from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
-
-from sanic.exceptions import ServerError
-from sanic.server.websockets.frame import WebsocketFrameAssembler
-
-
 try:
     from unittest.mock import AsyncMock
 except ImportError:
     from tests.asyncmock import AsyncMock  # type: ignore
 
+import pytest
+
+from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
+from sanic.exceptions import ServerError
+from sanic.server.websockets.frame import WebsocketFrameAssembler
+
+pytestmark = [
+    pytest.mark.asyncio,
+    pytest.mark.websocket,
+]
+
+def setup_module(module):
+    """Ensure websockets compatibility"""
+    try:
+        import websockets
+        if not hasattr(websockets, 'frames'):
+            pytest.skip("Incompatible websockets version")
+    except ImportError:
+        pytest.skip("websockets not installed")
 
 @pytest.mark.asyncio
 async def test_ws_frame_get_message_incomplete_timeout_0():
