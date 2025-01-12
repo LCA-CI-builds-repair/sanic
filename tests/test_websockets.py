@@ -1,20 +1,16 @@
 import re
 
 from asyncio import Event, Queue, TimeoutError
-from unittest.mock import Mock, call
+from unittest.mock import AsyncMock, Mock, call
 
 import pytest
 
 from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
-
 from sanic.exceptions import ServerError
 from sanic.server.websockets.frame import WebsocketFrameAssembler
 
-
-try:
-    from unittest.mock import AsyncMock
-except ImportError:
-    from tests.asyncmock import AsyncMock  # type: ignore
+# AsyncMock is now part of unittest.mock in Python 3.8+
+# Removing conditional import since we're running on Python 3.12
 
 
 @pytest.mark.asyncio
@@ -151,7 +147,7 @@ async def test_ws_frame_get_iter_none_in_queue():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.set()
     assembler.chunks = [b"foo", b"bar"]
-
+    
     chunks = [x async for x in assembler.get_iter()]
 
     assert chunks == [b"foo", b"bar"]
