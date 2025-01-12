@@ -138,7 +138,7 @@ async def test_ws_frame_get_iter_in_progress():
     assembler.get_in_progress = True
 
     message = re.escape(
-        "Called get_iter on Websocket frame assembler "
+        "Called get_iter() on Websocket frame assembler "
         "while asynchronous get is already in progress."
     )
 
@@ -223,7 +223,6 @@ async def test_ws_frame_put_message_into_queue(opcode):
     )
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize("opcode", DATA_OPCODES)
 async def test_ws_frame_put_not_fin(opcode):
     assembler = WebsocketFrameAssembler(Mock())
