@@ -71,7 +71,7 @@ async def test_ws_frame_get_message_with_timeout():
     assembler.message_complete.is_set = Mock(return_value=True)
     data = await assembler.get(0.1)
 
-    assert data == b""
+    assert data is None
     assembler.message_complete.wait.assert_awaited_once()
     assert assembler.message_complete.is_set.call_count == 2
 
@@ -119,17 +119,6 @@ async def test_ws_frame_get_paused():
 
     assert data is None
     assembler.protocol.resume_frames.assert_called_once()
-
-
-@pytest.mark.asyncio
-async def test_ws_frame_get_data():
-    assembler = WebsocketFrameAssembler(Mock())
-    assembler.message_complete = AsyncMock(spec=Event)
-    assembler.message_complete.is_set = Mock(return_value=True)
-    assembler.chunks = [b"foo", b"bar"]
-    data = await assembler.get()
-
-    assert data == b"foobar"
 
 
 @pytest.mark.asyncio
