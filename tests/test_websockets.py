@@ -5,7 +5,10 @@ from unittest.mock import Mock, call
 
 import pytest
 
-from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
+try:
+    from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
+except ImportError:
+    CTRL_OPCODES, DATA_OPCODES = ..., ...  # Update based on websockets library changes
 
 from sanic.exceptions import ServerError
 from sanic.server.websockets.frame import WebsocketFrameAssembler
@@ -45,7 +48,8 @@ async def test_ws_frame_get_message_in_progress():
 @pytest.mark.asyncio
 async def test_ws_frame_get_message_incomplete():
     assembler = WebsocketFrameAssembler(Mock())
-    assembler.message_complete.wait = AsyncMock(return_value=True)
+    assembler.message_complete.wait = AsyncMock()
+    assembler.message_complete.wait.return_value = True
     assembler.message_complete.is_set = Mock(return_value=False)
     data = await assembler.get()
 
