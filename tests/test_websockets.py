@@ -47,7 +47,7 @@ async def test_ws_frame_get_message_incomplete():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
     assembler.message_complete.is_set = Mock(return_value=False)
-    data = await assembler.get()
+    data = await assembler.get(timeout=None)
 
     assert data is None
     assembler.message_complete.wait.assert_awaited_once()
@@ -58,7 +58,7 @@ async def test_ws_frame_get_message():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
     assembler.message_complete.is_set = Mock(return_value=True)
-    data = await assembler.get()
+    data = await assembler.get(timeout=None)
 
     assert data == b""
     assembler.message_complete.wait.assert_awaited_once()
@@ -69,7 +69,7 @@ async def test_ws_frame_get_message_with_timeout():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
     assembler.message_complete.is_set = Mock(return_value=True)
-    data = await assembler.get(0.1)
+    data = await assembler.get(timeout=0.1)
 
     assert data == b""
     assembler.message_complete.wait.assert_awaited_once()
@@ -81,7 +81,8 @@ async def test_ws_frame_get_message_with_timeouterror():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
     assembler.message_complete.is_set = Mock(return_value=True)
-    assembler.message_complete.wait.side_effect = TimeoutError("...")
+    assembler.message_complete.wait = AsyncMock(side_effect=TimeoutError("..."))
+    assembler.message_complete.clear = Mock()
     data = await assembler.get(0.1)
 
     assert data == b""
@@ -104,7 +105,7 @@ async def test_ws_frame_get_not_completed_start():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.is_set = Mock(side_effect=[False, True])
-    data = await assembler.get(0.1)
+    data = await assembler.get(timeout=0.1)
 
     assert data is None
 
