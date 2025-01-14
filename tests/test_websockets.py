@@ -58,8 +58,8 @@ async def test_ws_frame_get_message():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
     assembler.message_complete.is_set = Mock(return_value=True)
-    data = await assembler.get()
-
+    async with assembler.get_context():
+        data = await assembler.get()
     assert data == b""
     assembler.message_complete.wait.assert_awaited_once()
 
@@ -68,8 +68,8 @@ async def test_ws_frame_get_message():
 async def test_ws_frame_get_message_with_timeout():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
-    assembler.message_complete.is_set = Mock(return_value=True)
-    data = await assembler.get(0.1)
+    async with assembler.get_context(timeout=0.1):
+        data = await assembler.get()
 
     assert data == b""
     assembler.message_complete.wait.assert_awaited_once()
@@ -80,9 +80,9 @@ async def test_ws_frame_get_message_with_timeout():
 async def test_ws_frame_get_message_with_timeouterror():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
-    assembler.message_complete.is_set = Mock(return_value=True)
     assembler.message_complete.wait.side_effect = TimeoutError("...")
-    data = await assembler.get(0.1)
+    async with assembler.get_context(timeout=0.1):
+        data = await assembler.get()
 
     assert data == b""
     assembler.message_complete.wait.assert_awaited_once()
