@@ -57,8 +57,10 @@ async def test_ws_frame_get_message_incomplete():
 async def test_ws_frame_get_message():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
+    assembler.message_complete.clear = AsyncMock()
     assembler.message_complete.is_set = Mock(return_value=True)
     data = await assembler.get()
+    assembler.message_fetched.set()
 
     assert data == b""
     assembler.message_complete.wait.assert_awaited_once()
@@ -68,8 +70,10 @@ async def test_ws_frame_get_message():
 async def test_ws_frame_get_message_with_timeout():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
+    assembler.message_complete.clear = AsyncMock()
     assembler.message_complete.is_set = Mock(return_value=True)
     data = await assembler.get(0.1)
+    assembler.message_fetched.set()
 
     assert data == b""
     assembler.message_complete.wait.assert_awaited_once()
@@ -81,6 +85,7 @@ async def test_ws_frame_get_message_with_timeouterror():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.wait = AsyncMock(return_value=True)
     assembler.message_complete.is_set = Mock(return_value=True)
+    assembler.message_complete.clear = AsyncMock()
     assembler.message_complete.wait.side_effect = TimeoutError("...")
     data = await assembler.get(0.1)
 
@@ -125,9 +130,11 @@ async def test_ws_frame_get_paused():
 async def test_ws_frame_get_data():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
+    assembler.message_complete.clear = AsyncMock()
     assembler.message_complete.is_set = Mock(return_value=True)
     assembler.chunks = [b"foo", b"bar"]
     data = await assembler.get()
+    assembler.message_fetched.set()
 
     assert data == b"foobar"
 
@@ -151,7 +158,10 @@ async def test_ws_frame_get_iter_none_in_queue():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete.set()
     assembler.chunks = [b"foo", b"bar"]
+    assembler.message_fetched = AsyncMock(spec=Event)
+    assembler.message_fetched.set()
 
+    assembler.message_complete.clear()
     chunks = [x async for x in assembler.get_iter()]
 
     assert chunks == [b"foo", b"bar"]
