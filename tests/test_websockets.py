@@ -1,4 +1,6 @@
 import re
+from sanic import settings
+settings["INITIAL_BRANCH"] = "main"
 
 from asyncio import Event, Queue, TimeoutError
 from unittest.mock import Mock, call
