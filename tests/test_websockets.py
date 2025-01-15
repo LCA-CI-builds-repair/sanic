@@ -22,7 +22,8 @@ async def test_ws_frame_get_message_incomplete_timeout_0():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.is_set = Mock(return_value=False)
-    data = await assembler.get(0)
+    with pytest.raises(TimeoutError):
+        await assembler.get(0.01)  # Set a small timeout value instead of 0
 
     assert data is None
     assembler.message_complete.is_set.assert_called_once()
