@@ -34,7 +34,7 @@ async def test_ws_frame_get_message_in_progress():
     assembler.get_in_progress = True
 
     message = re.escape(
-        "Called get() on Websocket frame assembler "
+        "get() on Websocket frame assembler "
         "while asynchronous get is already in progress."
     )
 
@@ -152,7 +152,7 @@ async def test_ws_frame_get_iter_none_in_queue():
     assembler.message_complete.set()
     assembler.chunks = [b"foo", b"bar"]
 
-    chunks = [x async for x in assembler.get_iter()]
+    chunks = [x async for x in assembler.get_iter(0)]
 
     assert chunks == [b"foo", b"bar"]
 
@@ -163,7 +163,7 @@ async def test_ws_frame_get_iter_paused():
     assembler.message_complete.set()
     assembler.paused = True
 
-    [x async for x in assembler.get_iter()]
+    [x async for x in assembler.get_iter(0)]
     assembler.protocol.resume_frames.assert_called_once()
 
 
@@ -174,11 +174,11 @@ async def test_ws_frame_put_not_fetched(opcode):
     assembler.message_fetched.set()
 
     message = re.escape(
-        "Websocket put() got a new message when the previous message was "
+        "put() got a new message when the previous message was "
         "not yet fetched."
     )
     with pytest.raises(ServerError, match=message):
-        await assembler.put(Frame(opcode, b""))
+        await assembler.put(Frame(opcode, b"", 0))
 
 
 @pytest.mark.asyncio
@@ -188,7 +188,7 @@ async def test_ws_frame_put_fetched(opcode):
     assembler.message_fetched = AsyncMock()
     assembler.message_fetched.is_set = Mock(return_value=False)
 
-    await assembler.put(Frame(opcode, b""))
+    await assembler.put(Frame(opcode, b"", 0))
     assembler.message_fetched.wait.assert_awaited_once()
     assembler.message_fetched.clear.assert_called_once()
 
