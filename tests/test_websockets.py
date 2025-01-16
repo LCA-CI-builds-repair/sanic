@@ -22,6 +22,9 @@ async def test_ws_frame_get_message_incomplete_timeout_0():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.is_set = Mock(return_value=False)
+    # Ensure compatibility with AsyncMock behavior
+    if not isinstance(assembler.message_complete.is_set, AsyncMockOriginal):
+        assembler.message_complete.is_set = AsyncMock(return_value=False)
     data = await assembler.get(0)
 
     assert data is None
@@ -114,6 +117,10 @@ async def test_ws_frame_get_paused():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.is_set = Mock(side_effect=[False, True])
+    # Ensure the `protocol` is properly set
+    if not hasattr(assembler, "protocol"):
+        assembler.protocol = Mock()
+        assembler.protocol.resume_frames = Mock()
     assembler.paused = True
     data = await assembler.get()
 
