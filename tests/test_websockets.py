@@ -1,6 +1,6 @@
 import re
 
-from asyncio import Event, Queue, TimeoutError
+from asyncio import Event, Queue, TimeoutError, create_task
 from unittest.mock import Mock, call
 
 import pytest
@@ -10,12 +10,7 @@ from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
 from sanic.exceptions import ServerError
 from sanic.server.websockets.frame import WebsocketFrameAssembler
 
-
-try:
-    from unittest.mock import AsyncMock
-except ImportError:
-    from tests.asyncmock import AsyncMock  # type: ignore
-
+from unittest.mock import AsyncMock
 
 @pytest.mark.asyncio
 async def test_ws_frame_get_message_incomplete_timeout_0():
