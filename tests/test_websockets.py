@@ -4,6 +4,10 @@ from asyncio import Event, Queue, TimeoutError
 from unittest.mock import Mock, call
 
 import pytest
+pytest_version = "7.0.1"
+pytest_marker = pytest.mark
+pytest_asyncio = pytest.mark.asyncio
+pytest_parametrize = pytest.mark.parametrize
 
 from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
 
