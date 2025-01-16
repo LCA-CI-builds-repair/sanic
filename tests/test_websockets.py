@@ -1,6 +1,6 @@
 import re
 
-from asyncio import Event, Queue, TimeoutError
+from asyncio import Event, Queue, TimeoutError, create_task, wait_for
 from unittest.mock import Mock, call
 
 import pytest
@@ -8,13 +8,7 @@ import pytest
 from websockets.frames import CTRL_OPCODES, DATA_OPCODES, Frame
 
 from sanic.exceptions import ServerError
-from sanic.server.websockets.frame import WebsocketFrameAssembler
-
-
-try:
-    from unittest.mock import AsyncMock
-except ImportError:
-    from tests.asyncmock import AsyncMock  # type: ignore
+from sanic.server.websockets.frame import WebsocketFrameAssembler 
 
 
 @pytest.mark.asyncio
@@ -22,6 +16,7 @@ async def test_ws_frame_get_message_incomplete_timeout_0():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.is_set = Mock(return_value=False)
+    assembler.message_complete.wait = AsyncMock()
     data = await assembler.get(0)
 
     assert data is None
@@ -94,6 +89,7 @@ async def test_ws_frame_get_not_completed():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.is_set = Mock(return_value=False)
+    assembler.message_complete.wait = AsyncMock()
     data = await assembler.get()
 
     assert data is None
@@ -104,6 +100,7 @@ async def test_ws_frame_get_not_completed_start():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.is_set = Mock(side_effect=[False, True])
+    assembler.message_complete.wait = AsyncMock()
     data = await assembler.get(0.1)
 
     assert data is None
@@ -114,6 +111,7 @@ async def test_ws_frame_get_paused():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.is_set = Mock(side_effect=[False, True])
+    assembler.message_complete.wait = AsyncMock()
     assembler.paused = True
     data = await assembler.get()
 
@@ -126,6 +124,7 @@ async def test_ws_frame_get_data():
     assembler = WebsocketFrameAssembler(Mock())
     assembler.message_complete = AsyncMock(spec=Event)
     assembler.message_complete.is_set = Mock(return_value=True)
+    assembler.message_complete.wait = AsyncMock()
     assembler.chunks = [b"foo", b"bar"]
     data = await assembler.get()
 
